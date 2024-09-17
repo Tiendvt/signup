@@ -37,7 +37,7 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao {
 
 	@Override
 	public UserModel findById(int id) {
-		String sql = "SELECT * FROM users WHERE username = ? ";
+		String sql = "SELECT * FROM users WHERE id = ? ";
 		try {
 			conn = new DBConnectSQL().getConnection();
 			ps = conn.prepareStatement(sql);
@@ -69,18 +69,32 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao {
 	}
 
 	public static void main(String[] args) {
-		UserDaoImpl userDao = new UserDaoImpl();
-		List<UserModel> list = userDao.findAll();
-		for (UserModel user : list) {
-			System.out.println(user);
-		}
-		String testUsername = "tiendv"; // Replace with an actual username for testing
-	    UserModel user = userDao.findByUserName(testUsername);
-	    if (user != null) {
-	        System.out.println("User found:");
+	    UserDaoImpl userDao = new UserDaoImpl();
+
+	    // Test findAll method
+	    List<UserModel> list = userDao.findAll();
+	    for (UserModel user : list) {
 	        System.out.println(user);
+	    }
+
+	    // Test findByUserName method
+	    String testUsername = "tiendv"; // Replace with an actual username for testing
+	    UserModel userByUsername = userDao.findByUserName(testUsername);
+	    if (userByUsername != null) {
+	        System.out.println("User found by username:");
+	        System.out.println(userByUsername);
 	    } else {
 	        System.out.println("User not found with username: " + testUsername);
+	    }
+
+	    // Test findById method
+	    int testId = 1; // Replace with an actual ID for testing
+	    UserModel userById = userDao.findById(testId);
+	    if (userById != null) {
+	        System.out.println("User found by ID:");
+	        System.out.println(userById);
+	    } else {
+	        System.out.println("User not found with ID: " + testId);
 	    }
 	}
 
