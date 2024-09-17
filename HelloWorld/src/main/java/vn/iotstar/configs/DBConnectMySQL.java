@@ -8,7 +8,7 @@ public class DBConnectMySQL {
 	private static String USERNAME = "root";
 
 
-	 private static String PASSWORD = "Dovantientk1!";
+	 private static String PASSWORD = "12345678";
 
 
 	 private static String DRIVER = "com.mysql.cj.jdbc.Driver";

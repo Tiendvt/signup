@@ -16,7 +16,7 @@ public class DBConnectSQL {
 	 private final String userID = "sa";
 
 
-	 private final String password = "Dovantientk1!";
+	 private final String password = "12345678";
 
 
 

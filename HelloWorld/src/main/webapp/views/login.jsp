@@ -20,7 +20,7 @@
 
 	<div class="container" style="background-color: #f1f1f1">
 		<button type="button" class="cancelbtn">Cancel</button>
-		<span class="psw">Forgot <a href="#">password?</a></span>
+		<span class="psw">Forgot <a href="/HelloWorld/reset-password-request">password?</a></span>
 		<button type="button" class="registerbtn" onclick="window.location.href='/HelloWorld/register';">Register</button>
 	</div>
 	

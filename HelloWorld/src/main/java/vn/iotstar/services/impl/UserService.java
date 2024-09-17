@@ -2,6 +2,18 @@ package vn.iotstar.services.impl;
 
 import vn.iotstar.services.IUserService;
 import vn.iotstar.models.UserModel;
+
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+
+import java.util.Properties;
+
 import vn.iotstar.dao.IUserDao;
 import vn.iotstar.dao.impl.UserDaoImpl;
 
@@ -52,5 +64,18 @@ public class UserService implements IUserService {
 	public boolean checkExistPhone(String phone) {
 		return userDao.checkExistPhone(phone);
 	}
+
+	@Override
+    public boolean updatePassword(String username, String newPassword) {
+        UserModel user = userDao.findByUserName(username);
+        if (user != null) {
+            user.setPassword(newPassword);
+            // Update user in the database
+            return userDao.update(user);
+        }
+        return false;
+    }
+
+	
 
 }

@@ -223,4 +223,19 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao {
 		return duplicate;
 	}
 
+	@Override
+	public boolean update(UserModel user) {
+		String sql = "UPDATE users SET password = ? WHERE username = ?";
+        try {
+            conn = super.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, user.getPassword());
+            ps.setString(2, user.getUsername());
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+	}
 }
