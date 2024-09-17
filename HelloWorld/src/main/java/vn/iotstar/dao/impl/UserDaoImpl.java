@@ -64,41 +64,83 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao {
 
 	@Override
 	public void insert(UserModel user) {
-		// TODO Auto-generated method stub
-
+		String sql = "INSERT INTO users(username, password,image , fullname,email , phone,roleid,createDate) VALUES (?,?,?,?,?,?,?,?)";
+				try {
+				conn = new DBConnectSQL().getConnection();
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, user.getUsername());
+				ps.setString(2, user.getPassword());
+				ps.setString(3, user.getImage());
+				ps.setString(4, user.getFullname());
+				ps.setString(5, user.getEmail());
+				ps.setString(6,user.getPhone());
+				ps.setInt(7,user.getRoleid());
+				ps.setDate(8, user.getCreateDate());
+				ps.executeUpdate();
+				} catch (Exception e) {e.printStackTrace();}
 	}
 
 	public static void main(String[] args) {
-	    UserDaoImpl userDao = new UserDaoImpl();
+		UserDaoImpl userDao = new UserDaoImpl();
 
-	    // Test findAll method
-	    List<UserModel> list = userDao.findAll();
-	    for (UserModel user : list) {
-	        System.out.println(user);
-	    }
+		// Test findAll method
+		List<UserModel> list = userDao.findAll();
+		for (UserModel user : list) {
+			System.out.println(user);
+		}
 
-	    // Test findByUserName method
-	    String testUsername = "tiendv"; // Replace with an actual username for testing
-	    UserModel userByUsername = userDao.findByUserName(testUsername);
-	    if (userByUsername != null) {
-	        System.out.println("User found by username:");
-	        System.out.println(userByUsername);
+		// Test findByUserName method
+		String testUsername = "tiendv"; // Replace with an actual username for testing
+		UserModel userByUsername = userDao.findByUserName(testUsername);
+		if (userByUsername != null) {
+			System.out.println("User found by username:");
+			System.out.println(userByUsername);
+		} else {
+			System.out.println("User not found with username: " + testUsername);
+		}
+
+		// Test findById method
+		int testId = 1; // Replace with an actual ID for testing
+		UserModel userById = userDao.findById(testId);
+		if (userById != null) {
+			System.out.println("User found by ID:");
+			System.out.println(userById);
+		} else {
+			System.out.println("User not found with ID: " + testId);
+		}
+		 // Test insert method
+	    UserModel newUser1 = new UserModel();
+	    newUser1.setEmail("newuser@example.com");
+	    newUser1.setUsername("newuser1");
+	    newUser1.setFullname("New User1");
+	    newUser1.setPassword("password1231");
+	    newUser1.setImage("default.png");
+	    newUser1.setRoleid(2); 
+	    newUser1.setPhone("12345678901");
+	    newUser1.setCreateDate(new java.sql.Date(System.currentTimeMillis())); // Sets current date
+
+	    userDao.insert(newUser1);
+
+	    // Verify insertion by finding the user by username
+	    UserModel insertedUser = userDao.findByUserName("newuser1");
+	    if (insertedUser != null) {
+	        System.out.println("User successfully inserted:");
+	        System.out.println(insertedUser);
 	    } else {
-	        System.out.println("User not found with username: " + testUsername);
+	        System.out.println("Failed to insert user.");
 	    }
+	    String emailToCheck = "newuser@example.com";
+        String usernameToCheck = "newuser";
+        String phoneToCheck = "11111111";
 
-	    // Test findById method
-	    int testId = 1; // Replace with an actual ID for testing
-	    UserModel userById = userDao.findById(testId);
-	    if (userById != null) {
-	        System.out.println("User found by ID:");
-	        System.out.println(userById);
-	    } else {
-	        System.out.println("User not found with ID: " + testId);
-	    }
+        boolean emailExists = userDao.checkExistEmail(emailToCheck);
+        boolean usernameExists = userDao.checkExistUsername(usernameToCheck);
+        boolean phoneExists = userDao.checkExistPhone(phoneToCheck);
+
+        System.out.println("Email exists: " + emailExists);
+        System.out.println("Username exists: " + usernameExists);
+        System.out.println("Phone exists: " + phoneExists);
 	}
-
-	
 
 	@Override
 	public UserModel findByUserName(String username) {
@@ -125,6 +167,60 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public boolean checkExistEmail(String email) {
+		boolean duplicate = false;
+		String query = "select * from users where email = ?";
+		try {
+		conn = new DBConnectSQL().getConnection();
+		ps = conn.prepareStatement(query);
+		ps.setString(1, email);
+		rs = ps.executeQuery();
+		if (rs.next()) {
+		duplicate = true;
+		}
+		ps.close();
+		conn.close();
+		} catch (Exception ex) {}
+		return duplicate;
+	}
+
+	@Override
+	public boolean checkExistUsername(String username) {
+		boolean duplicate = false;
+		String query = "select * from users where username = ?";
+		try {
+		conn = new DBConnectSQL().getConnection();
+		ps = conn.prepareStatement(query);
+		ps.setString(1, username);
+		rs = ps.executeQuery();
+		if (rs.next()) {
+		duplicate = true;
+		}
+		ps.close();
+		conn.close();
+		} catch (Exception ex) {}
+		return duplicate;
+	}
+
+	@Override
+	public boolean checkExistPhone(String phone) {
+		boolean duplicate = false;
+		String query = "select * from users where phone = ?";
+		try {
+		conn = new DBConnectSQL().getConnection();
+		ps = conn.prepareStatement(query);
+		ps.setString(1, phone);
+		rs = ps.executeQuery();
+		if (rs.next()) {
+		duplicate = true;
+		}
+		ps.close();
+		conn.close();
+		} catch (Exception ex) {}
+		return duplicate;
 	}
 
 }
