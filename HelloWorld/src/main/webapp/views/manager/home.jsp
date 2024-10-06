@@ -7,7 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-trang chu cua manager!
- <a href="${pageContext.request.contextPath}/logout">Logout</a>
+xin chao manager
 </body>
 </html>
